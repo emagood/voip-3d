@@ -1,0 +1,55 @@
+[gd_scene load_steps=9 format=3 uid="uid://cp8m5k5wxyt60"]
+
+[ext_resource type="PackedScene" uid="uid://da6j6124gu67a" path="res://audioManager.tscn" id="1_a207m"]
+[ext_resource type="Script" path="res://character.gd" id="1_jdxc6"]
+
+[sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_jg0he"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_mqgo7"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6fmgu"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_p7lxq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f5r3w"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0um0r"]
+material = SubResource("StandardMaterial3D_f5r3w")
+size = Vector3(0.5, 0.2, 0.2)
+
+[node name="character" type="CharacterBody3D"]
+collision_layer = 2
+script = ExtResource("1_jdxc6")
+
+[node name="audioManager" parent="." instance=ExtResource("1_a207m")]
+outputPath = NodePath("../AudioStreamPlayer3D")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -0.7)
+stream = SubResource("AudioStreamGenerator_jg0he")
+autoplay = true
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_mqgo7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+shape = SubResource("CapsuleShape3D_6fmgu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+mesh = SubResource("CapsuleMesh_p7lxq")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -0.5)
+mesh = SubResource("BoxMesh_0um0r")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, -0.604013)

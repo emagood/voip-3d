@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccfgrt55f2jbc"]
+
+[ext_resource type="Script" path="res://testScene.gd" id="1_wixvr"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_wixvr")
+
+[node name="server" type="Node" parent="."]
+
+[node name="host" type="Button" parent="server"]
+offset_right = 268.0
+offset_bottom = 73.0
+text = "host server"
+
+[node name="client" type="Node" parent="."]
+
+[node name="connectToServer" type="Button" parent="client"]
+offset_left = -1.0
+offset_top = 125.0
+offset_right = 267.0
+offset_bottom = 198.0
+text = "connect to server"
+
+[connection signal="button_down" from="server/host" to="." method="_on_host_button_down"]
+[connection signal="button_down" from="client/connectToServer" to="." method="_on_connect_to_server_button_down"]
