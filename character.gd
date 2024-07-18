@@ -9,7 +9,7 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
-	pass
+
 func _ready():
 	get_node("audioManager").setupAudio(name.to_int())
 	

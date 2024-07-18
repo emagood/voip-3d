@@ -21,16 +21,19 @@ func setupAudio(id):
 		input.play()
 		index = AudioServer.get_bus_index("Record")
 		effect = AudioServer.get_bus_effect(index, 0)
+		#print("called from: %s; effect: %s; playback: %s" % [id, effect, get_node(outputPath).get_path()])
 
 func _process(delta):
 	if multiplayer.is_server():
 		return
+	#if Input.is_action_pressed("rec") and is_multiplayer_authority():
 	elif is_multiplayer_authority():
 		processMic()
 	processVoice()
 
 func processMic():
 	var StereoData: PackedVector2Array = effect.get_buffer(effect.get_frames_available())
+	
 	if StereoData.size() > 0:
 		var data = PackedFloat32Array()
 		data.resize(StereoData.size())
@@ -40,6 +43,7 @@ func processMic():
 			var value = (StereoData[i].x + StereoData[i].y) / 2
 			maxAmplitude = max(value, maxAmplitude)
 			data[i] = value
+		#print(multiplayer.get_unique_id(), ":   ", maxAmplitude)
 		if maxAmplitude < inputThreshold:
 			return
 		
@@ -57,6 +61,6 @@ func processVoice():
 func sendData(data: PackedFloat32Array, audioManagerPath: NodePath):
 	if multiplayer.is_server():
 		return
-	print("recievied audio on %s from: %s" % [multiplayer.get_unique_id(), audioManagerPath])
+	#print("recievied audio on %s from: %s" % [multiplayer.get_unique_id(), audioManagerPath])
 	get_node(audioManagerPath).receiveBuffer.append_array(data)
 	

@@ -2,24 +2,26 @@
 
 [ext_resource type="Script" path="res://testScene.gd" id="1_wixvr"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Node3D" type="Node3D"]
 script = ExtResource("1_wixvr")
 
-[node name="server" type="Node" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="host" type="Button" parent="server"]
+[node name="server" type="Node" parent="CanvasLayer"]
+
+[node name="host" type="Button" parent="CanvasLayer/server"]
 offset_right = 268.0
 offset_bottom = 73.0
 text = "host server"
 
-[node name="client" type="Node" parent="."]
+[node name="client" type="Node" parent="CanvasLayer"]
 
-[node name="connectToServer" type="Button" parent="client"]
+[node name="connectToServer" type="Button" parent="CanvasLayer/client"]
 offset_left = -1.0
 offset_top = 125.0
 offset_right = 267.0
 offset_bottom = 198.0
 text = "connect to server"
 
-[connection signal="button_down" from="server/host" to="." method="_on_host_button_down"]
-[connection signal="button_down" from="client/connectToServer" to="." method="_on_connect_to_server_button_down"]
+[connection signal="button_down" from="CanvasLayer/server/host" to="." method="_on_host_button_down"]
+[connection signal="button_down" from="CanvasLayer/client/connectToServer" to="." method="_on_connect_to_server_button_down"]
