@@ -43,11 +43,16 @@ func processMic():
 			var value = (StereoData[i].x + StereoData[i].y) / 2
 			maxAmplitude = max(value, maxAmplitude)
 			data[i] = value
+			
 		#print(multiplayer.get_unique_id(), ":   ", maxAmplitude)
 		if maxAmplitude < inputThreshold:
 			return
+			
+		## compress
+		var bite = data.to_byte_array() #packarray from packarray32float
+		var bite2 = bite.compress(1)# comprimido deflate mode 1
 		
-		sendData.rpc(data, self.get_path())
+		sendData.rpc(bite2, self.get_path())
 
 func processVoice():
 	if receiveBuffer.size() <= 0:
@@ -58,9 +63,14 @@ func processVoice():
 		receiveBuffer.remove_at(0)
 
 @rpc("any_peer", "call_remote")
-func sendData(data: PackedFloat32Array, audioManagerPath: NodePath):
+func sendData(data, audioManagerPath: NodePath):
 	if multiplayer.is_server():
 		return
+	## descompress data 
+	var decomp_dynamic : PackedByteArray = data.decompress_dynamic(-1, 1) # desompress dynamic
+	var bit_array:Array = Array(decomp_dynamic)# combert packed array a array
+	data = PackedFloat32Array(bit_array)# combert array a packed float 32
+	
 	#print("recievied audio on %s from: %s" % [multiplayer.get_unique_id(), audioManagerPath])
 	get_node(audioManagerPath).receiveBuffer.append_array(data)
 	
