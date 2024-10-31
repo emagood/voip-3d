@@ -7,6 +7,10 @@ func _ready():
 		push_warning("SERVER SESSION")
 		multiplayer.peer_connected.connect(createPlayer)
 		multiplayer.peer_disconnected.connect(removePlayer)
+		print("CREATE SERVER %s" % 1)
+		var player = playerScene.instantiate()
+		player.name = str(1)
+		playersNode.add_child(player, true)
 	else:
 		push_warning("CLIENT SESSION")
 	pass
